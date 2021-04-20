@@ -3,8 +3,13 @@ use std::time::Duration;
 use conway::Life;
 use sdl2::{keyboard::Keycode, pixels::Color};
 
-const SCREEN_WIDTH: usize = 800;
-const SCREEN_HEIGHT: usize = 800;
+const CELL_SIZE: usize = 8;
+
+const BOARD_WIDTH: usize = 100;
+const BOARD_HEIGHT: usize = 100;
+
+const SCREEN_WIDTH: usize = BOARD_WIDTH * CELL_SIZE;
+const SCREEN_HEIGHT: usize = BOARD_HEIGHT * CELL_SIZE;
 
 fn main() {
     let sdl_context = sdl2::init().unwrap();
@@ -19,11 +24,11 @@ fn main() {
 
     let mut canvas = window.into_canvas().build().unwrap();
 
-    canvas.set_scale(16.0, 16.0).unwrap();
+    canvas.set_scale(CELL_SIZE as f32, CELL_SIZE as f32).unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
-    let mut life = Life::new(SCREEN_WIDTH / 16, SCREEN_HEIGHT / 16);
+    let mut life = Life::new(BOARD_WIDTH, BOARD_HEIGHT);
 
     life.randomize();
 
@@ -56,33 +61,3 @@ fn main() {
         ::std::thread::sleep(Duration::new(0, 1_000_000_000 / 60));
     }
 }
-
-// fn color_cycle(i: u32) -> Color {
-//     let i = i % 360;
-
-//     if i < 60 {
-//         // orange
-//         let i = (i * 256 / 60) as u8;
-//         Color::RGB(255, i, 0)
-//     } else if i < 120 {
-//         // lime
-//         let i = ((i - 60) * 256 / 60) as u8;
-//         Color::RGB(255 - i, 255, 0)
-//     } else if i < 180 {
-//         // turquoise
-//         let i = ((i - 120) * 256 / 60) as u8;
-//         Color::RGB(0, 255, i)
-//     } else if i < 240 {
-//         // azure
-//         let i = ((i - 180) * 256 / 60) as u8;
-//         Color::RGB(0, 255 - i, 255)
-//     } else if i < 300 {
-//         // purple
-//         let i = ((i - 240) * 256 / 60) as u8;
-//         Color::RGB(i, 0, 255)
-//     } else {
-//         // pink
-//         let i = ((i - 300) * 256 / 60) as u8;
-//         Color::RGB(255, 0, 255 - i)
-//     }
-// }
