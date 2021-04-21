@@ -24,7 +24,9 @@ fn main() {
 
     let mut canvas = window.into_canvas().build().unwrap();
 
-    canvas.set_scale(CELL_SIZE as f32, CELL_SIZE as f32).unwrap();
+    canvas
+        .set_scale(CELL_SIZE as f32, CELL_SIZE as f32)
+        .unwrap();
 
     let mut event_pump = sdl_context.event_pump().unwrap();
 
@@ -32,7 +34,6 @@ fn main() {
 
     life.randomize();
 
-    
     'running: loop {
         canvas.set_draw_color(Color::BLACK);
         canvas.clear();
@@ -45,11 +46,11 @@ fn main() {
                 } => break 'running,
                 sdl2::event::Event::KeyDown {
                     keycode: Some(Keycode::R),
-                     ..
+                    ..
                 } => life.randomize(),
                 sdl2::event::Event::KeyDown {
                     keycode: Some(Keycode::G),
-                     ..
+                    ..
                 } => life.load_from_file("glider_gun").unwrap(),
                 _ => {}
             }

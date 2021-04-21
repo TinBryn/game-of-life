@@ -65,15 +65,14 @@ impl Life {
     pub fn randomize(&mut self) {
         let mut rng = rand::thread_rng();
         for (x, y) in self.enumerate_indices() {
-            self[(x, y)] = rng.gen_bool(0.5).into();
+            self[(x, y)] = rng.gen_bool(0.25).into();
         }
     }
 
     pub fn draw(&self, canvas: &mut Canvas<Window>) -> Result<(), String> {
         for (x, y) in self.enumerate_indices() {
             if self[(x, y)] == Cell::Alive {
-                canvas
-                    .draw_point(sdl2::rect::Point::new(x as i32, y as i32))?;
+                canvas.draw_point(sdl2::rect::Point::new(x as i32, y as i32))?;
             }
         }
         Ok(())
@@ -104,7 +103,7 @@ impl Life {
 
         for (y, line) in contents.lines().enumerate() {
             for (x, c) in line.chars().enumerate() {
-                if !c.is_whitespace() && c != '|'{
+                if !c.is_whitespace() && c != '|' {
                     self[(x, y)] = Cell::Alive;
                 }
             }
