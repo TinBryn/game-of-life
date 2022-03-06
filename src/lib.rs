@@ -111,21 +111,20 @@ impl Life {
     }
 
     fn count_neigbours(&self, (x, y): (usize, usize)) -> usize {
-        let x = x as isize;
-        let y = y as isize;
+        fn offset_wrapped(value: usize, offset: isize, span: usize) -> usize {
+            let x = value as isize;
+            let width = span as isize;
 
-        let width = self.width as isize;
-        let height = self.height as isize;
-
+            ((x + offset + width) % width) as usize
+        }
         (-1..=1)
             .flat_map(|i| {
                 (-1..=1).filter(move |&j| {
                     if i == 0 && j == 0 {
                         false
                     } else {
-                        let x = ((x + i + width) % width) as usize;
-                        let y = ((y + j + height) % height) as usize;
-
+                        let x = offset_wrapped(x, i, self.width);
+                        let y = offset_wrapped(y, j, self.height); 
                         self[(x, y)] == Cell::Alive
                     }
                 })
