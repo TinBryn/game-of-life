@@ -51,7 +51,7 @@ fn main() {
                 sdl2::event::Event::KeyDown {
                     keycode: Some(Keycode::G),
                     ..
-                } => life.load_from_file("glider_gun").unwrap(),
+                } => life.read_from(std::fs::File::open("glider_gun").unwrap()).unwrap(),
                 _ => {}
             }
         }

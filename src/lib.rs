@@ -1,4 +1,4 @@
-use std::{fs, io::Read};
+use std::io;
 
 use rand::Rng;
 use sdl2::{render::Canvas, video::Window};
@@ -91,9 +91,7 @@ impl Life {
         result
     }
 
-    pub fn load_from_file(&mut self, filename: &str) -> Result<(), std::io::Error> {
-        let mut file = fs::File::open(filename)?;
-
+    pub fn read_from<R: io::Read>(&mut self, mut file: R) -> Result<(), io::Error> {
         let mut contents = String::new();
         file.read_to_string(&mut contents)?;
 
