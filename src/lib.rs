@@ -81,10 +81,10 @@ impl Life {
     pub fn next(&self) -> Life {
         let mut result = Life::new(self.width, self.height);
         for (x, y) in self.enumerate_indices() {
-            let neigbours = self.get_neigbours(x, y);
+            let neigbours = self.count_neigbours((x, y));
             match self[(x, y)] {
                 Cell::Dead if neigbours == 3 => result[(x, y)] = Cell::Alive,
-                Cell::Alive if neigbours >= 2 && neigbours <= 3 => result[(x, y)] = Cell::Alive,
+                Cell::Alive if (2..=3).contains(&neigbours) => result[(x, y)] = Cell::Alive,
                 _ => result[(x, y)] = Cell::Dead,
             };
         }
@@ -110,28 +110,27 @@ impl Life {
         Ok(())
     }
 
-    fn get_neigbours(&self, x: usize, y: usize) -> usize {
+    fn count_neigbours(&self, (x, y): (usize, usize)) -> usize {
         let x = x as isize;
         let y = y as isize;
 
-        let mut count = 0;
+        let width = self.width as isize;
+        let height = self.height as isize;
 
-        for i in -1..=1 {
-            for j in -1..=1 {
-                if i == 0 && j == 0 {
-                    continue;
-                }
+        (-1..=1)
+            .flat_map(|i| {
+                (-1..=1).filter(move |&j| {
+                    if i == 0 && j == 0 {
+                        false
+                    } else {
+                        let x = ((x + i + width) % width) as usize;
+                        let y = ((y + j + height) % height) as usize;
 
-                let x = ((x + i + self.width as isize) % self.width as isize) as usize;
-                let y = ((y + j + self.height as isize) % self.height as isize) as usize;
-
-                if self[(x, y)] == Cell::Alive {
-                    count += 1;
-                }
-            }
-        }
-
-        count
+                        self[(x, y)] == Cell::Alive
+                    }
+                })
+            })
+            .count()
     }
 
     pub fn enumerate_indices(&self) -> IndicesEnumerate {
