@@ -10,6 +10,6 @@ Create a binary using Cargo `cargo build`, or just run it using `cargo run`
 
 Very limited controls at the moment.
 
- - ESC: quit the application
- - R: Randomise the grid to see what happens
- - G: Something
+- ESC: quit the application
+- R: Randomise the grid to see what happens
+- G: Something
